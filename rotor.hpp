@@ -23,33 +23,24 @@ namespace Enigma {
             // Let A = { x :: unsigned int | 0 <= x <= 25 }.
             // Let f :: A -> A, a bijective function which represents the
             // rotor-specific mapping. The functions f and f_inverse will
-            // access the private variable mapping and return the results
+            // access the private mapping variable and return the results
             // of calling f and its inverse f^(-1).
             int f(const int) override;
 
             int f_inverse(const int);
 
-            // Rotor specific functions. Will set the value of the notch.
-            bool get_notch();
-            
             // Rotates the rotor whenever a character is encoded.
-            void rotate();
+            bool rotate();
 
             // Overriding the << operator.
             friend std::ostream& operator<<(std::ostream&, const Rotor&);
 
         private: 
             // Array implementations of the functions f and f^(-1).
-            std::array<int, ALPHABET_LENGTH> mapping;
-            std::array<int, ALPHABET_LENGTH> inverse_mapping;
+            std::array<int, ALPHABET_LENGTH> map;
 
-            // Boolean value to specify whether the notch that makes the 
-            // next rotor to rotate by one position is in position.
-            bool notch;
-
-            // Integer value to specify the offset by which the rotor has
-            // been moved, offset :: A.
-            int offset;
+			// Integer value to specify the number of times it has rotated.
+			int offset;
 
             // Integer value to specify the index of this rotor in the
             // machine.

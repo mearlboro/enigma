@@ -1,60 +1,16 @@
 #include <iostream>
-#include <cstdint>
-#include <fstream>
-#include <sstream>
 #include <vector>
-#include <cstring>
-
-#include "rotor.hpp"
-#include "rotor.cpp"
 
 #include "reflector.hpp"
 #include "reflector.cpp"
-
+#include "rotor.hpp"
+#include "rotor.cpp"
 #include "plugboard.hpp"
 #include "plugboard.cpp"
+#include "util.hpp"
+#include "util.cpp"
 
 using namespace Enigma;
-
-class Util 
-{
-    public:
-        // Reads the content of a .pb or .rot file and returns an
-        // array representing the mapping.
-        static int *read_file(char *file, int *n, int &i) 
-        {
-            if(FILE *f = fopen(file, "r")) { // If file exists.
-				fclose(f);
-				std::ifstream fin(file); // Will read from file input.
-
-            	while (fin >> n[i]) ++i;
-            	return n;
-			} 
-			throw std::runtime_error("fopen failed");
-        }
-
-        // Converts an uppercase character in range 'A'-'Z' to its 
-        // corresponding index in the alphabet A.
-        static int ctoa(char C) 
-        { 
-            if('A' <= C && C <= 'Z') 
-            {
-                return (C - 'A');
-            }
-            return -1;
-        }
-
-        // Converts a number in range 0-25 to 
-        static char atoc(int x)
-        {
-            if(0 <= x && x < 26)
-            {
-                return (char)(x + ((int)'A'));
-            }
-            return -1;
-        }
-};
-
 
 std::vector<Rotor*> rotors;
 int no_rotors;
@@ -99,7 +55,6 @@ void enigma_encode(int &x)
 	if(no_rotors) {
     	for(Rotor *r : rotors) x = r->f(x);
     }
-
     // Reflector.
     x = re->f(x);
 
@@ -117,8 +72,7 @@ void enigma_encode(int &x)
 
     // Rotate rotor.
     if(no_rotors) {
-		rotors[to_rotate]->rotate();
-		if(rotors[to_rotate]->get_notch()) ++to_rotate;
+		if(rotors[to_rotate]->rotate()) ++to_rotate;
 	}
 }
 

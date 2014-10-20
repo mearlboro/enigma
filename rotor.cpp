@@ -1,19 +1,44 @@
 // rotor.cpp
 
-/////////////////////////////////////////////////////////////////////////
-// Definitions of the rotor class members. //////////////////////////////
-/////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////
+// Definitions of the rotor class members. ////////////////////////
+///////////////////////////////////////////////////////////////////
 
 #ifndef ROTOR_C_
 #define ROTOR_C_
 
 #include <array>
 #include <iostream>
-#include <cstdlib>
+#include <sstream>
 
 #include "rotor.hpp"
+#include "util.hpp"
 
 using namespace Enigma; 
+
+
+///////////////////////////////////////////////////////////////////
+
+// Constructor.
+
+// Let f(x)  = y
+// y_pointer the pointer to the mapping of the rotor read from file
+// x         iterate increasingly through the xs in the domain of f
+Rotor::Rotor(int* y_pointer, int rotor_index)
+{
+    index  = rotor_index;
+	offset = 0;
+
+    for(int x = 0; x < ALPHABET_LENGTH; ++x) 
+	{
+		map[x] = *(y_pointer + x);
+	}
+}
+
+// Destructor.
+Rotor::~Rotor() {}
+
+///////////////////////////////////////////////////////////////////
 
 // Let A = { x :: unsigned int | 0 <= x < 26 }.
 // Let f :: A -> A a bijective function which is used to define the 
@@ -21,75 +46,56 @@ using namespace Enigma;
 //       access the private variable mapping and return the results 
 //       of calling f and its inverse f^(-1).
 
-
-// Constructor and destructor.
-
-// Let f(x)  = y
-// y_pointer the pointer to the mapping of the rotor read from file
-// x         iterate increasingly through the xs in the domain of f
-
-Rotor::Rotor(int* y_pointer, int rotor_index)
-{
-    // Initialises the object
-    index  = rotor_index;
-    
-    offset = 0;
-	notch  = false;
-
-    for(int x = 0; x < 26; ++x) 
-    {
-        int f_x = *(y_pointer + x);
-        mapping[x] = f_x;
-        inverse_mapping[f_x] = x;
-    }
-}
-
-Rotor::~Rotor() {}
-
-// Returns the mapping done before the reflector, with the offset.
+// Implementation of f. Returns the mapping done before reflecting.
+// f(x)  = y
 int Rotor::f(const int x) 
 {
-	// PRE:  x    :: A
-	// POST: f(x) :: A
-    return mapping[x + offset];
+	// PRE: x :: A
+    return map[x];
 }
 
-// Returns the mapping done after the reflector by substracting the 
-// offset from the output. 
-int Rotor::f_inverse(const int x)
+// Implementation of f^(-1). Returns the mapping after reflecting.
+// f'(x) = y
+int Rotor::f_inverse(const int y)
 {
-	// PRE:  x            :: A
-    // POST: f_inverse(x) :: A
-    int y = inverse_mapping[x] - offset;
-    return (y >= 0) ? y : abs(y);//(abs(y) % ALPHABET_LENGTH);
+	// PRE: y :: A
+	int x = 0;
+	for(; x < ALPHABET_LENGTH; ++x) if(map[x] == y) break;
+	
+	if(x >= ALPHABET_LENGTH) throw std::runtime_error("inverse not found"); 
+	return x;
 }
 
-// Setting the notch to true will cause the next rotor to make a rotation.
-bool Rotor::get_notch()
+// Will rotate the rotor by shifting the mapping. Returns whether it
+// has reached a full rotation.
+bool Rotor::rotate() 
 {
-    return notch; 
+	// Shifts right the direct mapping.
+	int last  = map[ALPHABET_LENGTH - 1] - 1;
+    for(int i = ALPHABET_LENGTH - 1; i > 0; --i) {
+		map[i] = Util::decrement(map[i - 1]);
+	}
+	map[0] = Util::decrement(last); 
+	
+	++offset;
+	if(offset == 26) return true;
+	return false;	
 }
 
-// Will rotate the rotor by incrementing the offset.
-void Rotor::rotate() 
-{
-    ++offset;
-	if(offset == 27) notch = true;	
-}
+//////////////////////////////////////////////////////////////////
 
+// Overriding the << operator for printing the class details.
 namespace Enigma {
-    // Overriding the << operator for printing the details of the class.
     std::ostream& operator<<(std::ostream& o, const Rotor& r)
     {
         std::ostringstream convert;
         convert << "Rotor number " << r.index << ":\n"
                 << "\tRotated by " << r.offset << ";\n"
                 << "\tThe mapping is:";
-
-        for(auto i = 0; i < 26; i++)
+        for(auto i = 0; i < 26; ++i)
         { 
-            convert << "\n\tf(" << i << ")\t= " << r.mapping[i + r.offset] 
-                    << "\tf'(" << i << ")\t= " << r.inverse_mapping[i] - r.offset;
+            convert << "\n\tf(" << i << ")\t= " << r.map[i] 
+                    << "\tf'(" << r.map[i] << ")\t= " << i ;
         }
 
         return o << convert.str() << '\n';

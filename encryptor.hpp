@@ -25,6 +25,8 @@ namespace Enigma
         protected:
             // Constant to set the length of the Enigma machine alphabet.
             static const int ALPHABET_LENGTH = 26;
+
+		friend class Util;
     };
 
 }
