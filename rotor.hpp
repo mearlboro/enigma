@@ -45,7 +45,7 @@ namespace Enigma {
 
             // Boolean value to specify whether the notch that makes the 
             // next rotor to rotate by one position is in position.
-            // bool notch;
+            bool notch;
 
             // Integer value to specify the offset by which the rotor has
             // been moved, offset :: A.

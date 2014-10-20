@@ -12,6 +12,8 @@
 #include <array>
 
 #include "reflector.hpp"
+
+using namespace Enigma;
   
 Reflector::~Reflector() {}
 

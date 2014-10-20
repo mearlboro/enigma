@@ -9,8 +9,7 @@
 
 #include <array>
 #include <iostream>
-#include <sstream>
-#include <string>
+#include <cstdlib>
 
 #include "rotor.hpp"
 
@@ -27,7 +26,7 @@ using namespace Enigma;
 
 // Let f(x)  = y
 // y_pointer the pointer to the mapping of the rotor read from file
-// x_index   iterate increasingly through the xs in the domain of f
+// x         iterate increasingly through the xs in the domain of f
 
 Rotor::Rotor(int* y_pointer, int rotor_index)
 {
@@ -35,10 +34,11 @@ Rotor::Rotor(int* y_pointer, int rotor_index)
     index  = rotor_index;
     
     offset = 0;
+	notch  = false;
 
-    for(auto x = 0; x < 26; x++) 
+    for(int x = 0; x < 26; ++x) 
     {
-        auto f_x = *(y_pointer + x);
+        int f_x = *(y_pointer + x);
         mapping[x] = f_x;
         inverse_mapping[f_x] = x;
     }
@@ -49,32 +49,32 @@ Rotor::~Rotor() {}
 // Returns the mapping done before the reflector, with the offset.
 int Rotor::f(const int x) 
 {
+	// PRE:  x    :: A
+	// POST: f(x) :: A
     return mapping[x + offset];
 }
 
 // Returns the mapping done after the reflector by substracting the 
-// offset from the output. This might cause negative numbers, thus
-// it increases it by 26 if this is the case.
+// offset from the output. 
 int Rotor::f_inverse(const int x)
 {
+	// PRE:  x            :: A
+    // POST: f_inverse(x) :: A
     int y = inverse_mapping[x] - offset;
-    return (y >= 0) ? y : (y + ALPHABET_LENGTH);
+    return (y >= 0) ? y : abs(y);//(abs(y) % ALPHABET_LENGTH);
 }
 
 // Setting the notch to true will cause the next rotor to make a rotation.
 bool Rotor::get_notch()
 {
-    if (offset >= 26)  // a rotation is complete.
-    {
-        return true; 
-    }
-    return false;
+    return notch; 
 }
 
 // Will rotate the rotor by incrementing the offset.
 void Rotor::rotate() 
 {
-    offset++;
+    ++offset;
+	if(offset == 27) notch = true;	
 }
 
 namespace Enigma {

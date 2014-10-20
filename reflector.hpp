@@ -12,21 +12,24 @@
 
 #include "encryptor.hpp"
 
-class Reflector : public Encryptor
+namespace Enigma
 {
-    private:
-        const int REFLECTOR_OFFSET = 13;
+	class Reflector : public Encryptor
+	{
+		private:
+			const int REFLECTOR_OFFSET = 13;
 
-    public:
-        // Destructor.
-        ~Reflector();
+		public:
+			// Destructor.
+			~Reflector();
 
-        // Let A = { x :: unsigned int | 0 <= x <= 25 }.
-        // Let f :: A -> A, a bijective, self-inverse function which 
-        // represents the reflector-specific mapping. f = f^(-1)
-        // f x = (x + REFLECTOR_OFFSET) % ALPHABET_LENGTH
-        int f(const int) override;
-    
-};
+			// Let A = { x :: unsigned int | 0 <= x <= 25 }.
+			// Let f :: A -> A, a bijective, self-inverse function which 
+			// represents the reflector-specific mapping. f = f^(-1)
+			// f x = (x + REFLECTOR_OFFSET) % ALPHABET_LENGTH
+			int f(const int) override;
+		
+	};
+}
 
 #endif // REFLECTOR_H_

@@ -23,10 +23,14 @@ class Util
         // array representing the mapping.
         static int *read_file(char *file, int *n, int &i) 
         {
-            std::ifstream fin(file);
+            if(FILE *f = fopen(file, "r")) { // If file exists.
+				fclose(f);
+				std::ifstream fin(file); // Will read from file input.
 
-            while (fin >> n[i]) ++i;
-            return n;
+            	while (fin >> n[i]) ++i;
+            	return n;
+			} 
+			throw std::runtime_error("fopen failed");
         }
 
         // Converts an uppercase character in range 'A'-'Z' to its 
@@ -71,7 +75,7 @@ void enigma_init(int n_r, char** argv) {
 
     for(auto i = 1; i <= no_rotors; i++) // i starts from 1 because 
     {                                   // files start from argv[1]
-        int l = 0;    
+        int l = 0; 
         Rotor* r = new Rotor(Util::read_file(argv[i], n, l), i);
         rotors.push_back(r);
     }
@@ -86,33 +90,36 @@ void print_rotors()
         std::cout<<*r;
 }
 
-void enigma_encode(int x)
+void enigma_encode(int &x)
 {
     // Plugboard.
     x = p->f(x);
+
     // Forward through the rotors.
-    for(Rotor *r : rotors) 
-    {
-        x = r->f(x);
+	if(no_rotors) {
+    	for(Rotor *r : rotors) x = r->f(x);
     }
+
     // Reflector.
     x = re->f(x);
+
     // Backwards through the rotors.
-    std::vector<Rotor*>::reverse_iterator rr;
-    for(rr = rotors.rbegin(); rr != rotors.rend(); ++rr)
-    {
-        x = (*rr)->f_inverse(x);
-    }
+    if(no_rotors) {
+		std::vector<Rotor*>::reverse_iterator rr;
+		for(rr = rotors.rbegin(); rr != rotors.rend(); ++rr)
+		{
+			x = (*rr)->f_inverse(x);
+		}
+	}
+
     // Plugboard.
     x = p->f(x);
 
     // Rotate rotor.
-    rotors[to_rotate]->rotate();
-    if(rotors[to_rotate]->get_notch())
-    {
-        ++to_rotate;
-    }
-    std::cout << "Encrypted to: " << x << std::endl;
+    if(no_rotors) {
+		rotors[to_rotate]->rotate();
+		if(rotors[to_rotate]->get_notch()) ++to_rotate;
+	}
 }
 
 int main(int argc, char** argv)
@@ -120,11 +127,11 @@ int main(int argc, char** argv)
     enigma_init(argc - 2, argv); // first is program name, last is pb.
 
     char C;
-    while(std::cin.get(C)) 
+    while(std::cin>>C) 
     {
-        std::cout<<std::endl;
         int x = Util::ctoa(C);
         if(0 <= x && x < 26) enigma_encode(x);
+		std::cout << Util::atoc(x);
     }
     return 0;
 }
