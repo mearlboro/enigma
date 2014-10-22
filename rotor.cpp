@@ -40,11 +40,11 @@ Rotor::~Rotor() {}
 
 ///////////////////////////////////////////////////////////////////
 
-// Let A = { x :: unsigned int | 0 <= x < 26 }.
+// Let A = { x :: int | 0 <= x < 26 }.
 // Let f :: A -> A a bijective function which is used to define the 
 //       rotor-specific mapping. The functions f and f_inverse will
-//       access the private variable mapping and return the results 
-//       of calling f and its inverse f^(-1).
+//       access the private mapping variable and return the results 
+//       of calling f and its inverse f^(-1) = f'
 
 // Implementation of f. Returns the mapping done before reflecting.
 // f(x)  = y
@@ -59,10 +59,9 @@ int Rotor::f(const int x)
 int Rotor::f_inverse(const int y)
 {
 	// PRE: y :: A
-	int x = 0;
-	for(; x < ALPHABET_LENGTH; ++x) if(map[x] == y) break;
-	
-	if(x >= ALPHABET_LENGTH) throw std::runtime_error("inverse not found"); 
+	int x;
+	for(x = 0; x < ALPHABET_LENGTH; ++x) if(map[x] == y) break;
+//	if(x >= ALPHABET_LENGTH) throw std::runtime_error("inverse not found"); 
 	return x;
 }
 
@@ -70,12 +69,12 @@ int Rotor::f_inverse(const int y)
 // has reached a full rotation.
 bool Rotor::rotate() 
 {
-	// Shifts right the direct mapping.
-	int last  = map[ALPHABET_LENGTH - 1] - 1;
-    for(int i = ALPHABET_LENGTH - 1; i > 0; --i) {
-		map[i] = Util::decrement(map[i - 1]);
+	// Shifts left the direct mapping.
+	int first  = Util::decrement(map[0]);
+    for(int i = 0; i < ALPHABET_LENGTH - 1; ++i) {
+		map[i] = Util::decrement(map[i + 1]);
 	}
-	map[0] = Util::decrement(last); 
+	map[ALPHABET_LENGTH] = Util::decrement(first); 
 	
 	++offset;
 	if(offset == 26) return true;
@@ -93,9 +92,10 @@ namespace Enigma {
                 << "\tRotated by " << r.offset << ";\n"
                 << "\tThe mapping is:";
         for(auto i = 0; i < 26; ++i)
-        { 
-            convert << "\n\tf(" << i << ")\t= " << r.map[i] 
-                    << "\tf'(" << r.map[i] << ")\t= " << i ;
+        {
+			const int x = i;
+            convert << "\n\tf(" << i << ")\t= " << r.map[x];
+                 //   << "\tf'(" << i << ")\t= "  << r.f_inverse(x);
         }
 
         return o << convert.str() << '\n';
