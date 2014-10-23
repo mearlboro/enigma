@@ -7,8 +7,7 @@
 #ifndef PLUGBOARD_H_
 #define PLUGBOARD_H_
 
-#include <cstdint>
-#include <fstream>
+#include <iostream>
 #include <array>
 
 #include "encryptor.hpp"
@@ -22,18 +21,17 @@ namespace Enigma
             Plugboard(char*);
             ~Plugboard();
 
-            // Let A = { x :: unsigned int | 0 <= x <= 25 }.
-            // Let f :: A -> A, a bijective, self-inverse function which 
-            // represents the plugboard-specific mapping. The function f
-            // will access the private variable mapping.
+            // The plugboard map. 
             int f(const int) override;
 
+        private:
+            // Array implementation of the map..
+            std::array<int, ALPHABET_LENGTH> map;
+
+        public:
             // Overriding the << operator.
             friend std::ostream& operator<<(std::ostream&, const Plugboard&);
 
-        private:
-            // Array implementation of the function f.
-            std::array<int, ALPHABET_LENGTH> mapping;
     };
 
 }

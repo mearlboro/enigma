@@ -7,22 +7,25 @@
 #ifndef REFLECTOR_C_
 #define REFLECTOR_C_
 
-#include <cstdint>
-#include <fstream>
-#include <array>
-
 #include "reflector.hpp"
 
 using namespace Enigma;
-  
+
+//////////////////////////////////////////////////////////////////
+
+// Destructor.
 Reflector::~Reflector() {}
 
-// Definition of the function that performs the mapping.
-// Let A = { n :: unsigned int | 0 <= n < ALPHABET_LENGTH }.
+//////////////////////////////////////////////////////////////////
+
+// Let A = { x :: unsigned int | 0 <= x <= 25 }.
+// Let f :: A -> A, a bijective, self-inverse function which
+//       represents the reflector-specific mapping. f = f^(-1)
+
+// f x = (x + REFLECTOR_OFFSET) % ALPHABET_LENGTH
 int Reflector::f(const int x)
 {
     // PRE: x :: A
-    // assert(0 <= x && x < 26);
     return (x + Reflector::REFLECTOR_OFFSET) % 
             Reflector::ALPHABET_LENGTH;
 }

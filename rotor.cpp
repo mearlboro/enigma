@@ -7,12 +7,11 @@
 #ifndef ROTOR_C_
 #define ROTOR_C_
 
-#include <array>
 #include <iostream>
 #include <sstream>
+#include "util.hpp"
 
 #include "rotor.hpp"
-#include "util.hpp"
 
 using namespace Enigma; 
 
@@ -21,9 +20,7 @@ using namespace Enigma;
 
 // Constructor.
 
-// Let f(x) = y
-// y        the vector containing the mapping read from a .rot file 
-// x        iterates through the values in the alphabet
+// file contains pairs (x, y) such that f(x) = y
 Rotor::Rotor(char* file)
 {
 	offset = 0;
@@ -40,7 +37,7 @@ Rotor::~Rotor() {}
 
 ///////////////////////////////////////////////////////////////////
 
-// Let A = { x :: int | 0 <= x < 26 }.
+// Let A = { x :: int | 0 <= x < ALPHABET_LENGTH }.
 // Let f :: A -> A a bijective function which is used to define the 
 //       rotor-specific mapping. The functions f and f_inverse will
 //       access the private mapping variable and return the results 
@@ -70,7 +67,6 @@ int Rotor::f_inverse(const int y)
 // has reached a full rotation.
 bool Rotor::rotate() 
 {
-	// Shifts left the direct mapping.
 	int first = Util::decrement(map[0]);
     for(int i = 0; i < ALPHABET_LENGTH - 1; ++i) {
 		map[i] = Util::decrement(map[i + 1]);
@@ -89,8 +85,7 @@ namespace Enigma {
     std::ostream& operator<<(std::ostream& o, const Rotor& r)
     {
         std::ostringstream convert;
-        convert << "Rotor number " << r.index << ":\n"
-                << "\tRotated by " << r.offset << ";\n"
+        convert << "Rotor rotated by " << r.offset << ";\n"
                 << "\tThe mapping is:";
         for(auto i = 0; i < 26; ++i)
         {

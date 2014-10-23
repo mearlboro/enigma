@@ -14,11 +14,10 @@
 using namespace Enigma; 
 
 
+//////////////////////////////////////////////////////////////////
+
 // Reads the content of a .pb or .rot file and returns an array 
 // representing the mapping.
-
-// file the string containing the filename.
-// n    
 std::vector<int> Util::read_file(char* file)
 {
 	std::vector<int> y;
@@ -34,8 +33,10 @@ std::vector<int> Util::read_file(char* file)
 	throw std::runtime_error("fopen failed");
 }
 
+// Let A = { x :: int | 0 <= x < ALPHABET_LENGTH }
+
 // Converts an uppercase character in range 'A'-'Z' to its 
-// corresponding index in the alphabet A.
+// corresponding index in A.
 int Util::ctoa(char C)
 {
 	if(isupper(C))
@@ -45,7 +46,7 @@ int Util::ctoa(char C)
 	throw std::runtime_error("ctoa: invalid input to convert");
 }
 
-// Converts a number in range 0-25 to its corresponding character.
+// Converts a number in A to its corresponding character.
 char Util::atoc(int x)
 {
 	if(0 <= x && x < Encryptor::ALPHABET_LENGTH)
@@ -55,7 +56,8 @@ char Util::atoc(int x)
 	throw std::runtime_error("atoc: invalid input to convert");
 }
 
-// Decrements a number in alphabet A by 1.
+// Decrements a number in A by 1 with property P.
+// P: decrement(0) = ALPHABET_LENGTH - 1
 int Util::decrement(int x)
 {
 	--x;

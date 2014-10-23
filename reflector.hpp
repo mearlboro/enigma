@@ -7,9 +7,6 @@
 #ifndef REFLECTOR_H_
 #define REFLECTOR_H_
 
-#include <fstream>
-#include <array>
-
 #include "encryptor.hpp"
 
 namespace Enigma
@@ -23,10 +20,7 @@ namespace Enigma
 			// Destructor.
 			~Reflector();
 
-			// Let A = { x :: unsigned int | 0 <= x <= 25 }.
-			// Let f :: A -> A, a bijective, self-inverse function which 
-			// represents the reflector-specific mapping. f = f^(-1)
-			// f x = (x + REFLECTOR_OFFSET) % ALPHABET_LENGTH
+			// The reflector map.
 			int f(const int) override;
 		
 	};
