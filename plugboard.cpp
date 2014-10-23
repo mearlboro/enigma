@@ -14,27 +14,19 @@
 
 using namespace Enigma;
 
-// Let A = { x :: unsigned int | 0 <= x < 26 }.
-// Let f :: A -> A a bijective, self-inverse function which is used 
-//       to define the plugboard-specific mapping and will access the
-//       private variable mapping and to return its result.
 
-// Constructor and destructor.
-
-// Let f(x)  = y
-// y_pointer the pointer to the mapping of the plugboard as read 
-//           from file
-// x         iterate increasingly through the xs in the domain of f
-Plugboard::Plugboard(int* y_pointer, int n) 
+Plugboard::Plugboard(char* file) 
 {
     // Initialise the mapping to identity mapping.
-    for(int x = 0; x < 26; ++x) mapping[x] = x;
+    for(int x = 0; x < ALPHABET_LENGTH; ++x) mapping[x] = x;
 
     // Add the self-inverse entries read from the file.
-    for(int i = 0; i < n/2; ++i)
+	std::vector<int> y = Util::read_file(file);
+	int n = y.size() / 2;
+    for(int i = 0; i < n; ++i)
     {
-        int x   = *(y_pointer + (i * 2));
-        int f_x = *(y_pointer + (i * 2 + 1));
+        int x   = y[i * 2];
+        int f_x = y[i * 2 + 1];
         mapping[x]   = f_x;
         mapping[f_x] = x;
     }

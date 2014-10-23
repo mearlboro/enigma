@@ -12,18 +12,14 @@
 
 using namespace Enigma;
 
-const int n_rotors;
+int n_rotors;
 
 std::vector<Rotor*> rs;
 Reflector* re;
 Plugboard* p;
 std::vector<int> word;
 
-
-void print_rotors();
- 
 void enigma_init(int argc, char** argv) {
-    int n[26];
     n_rotors = argc - 2; // First argument is program name, last is
 						 // .pb, the rest are .rot.
 
@@ -31,77 +27,65 @@ void enigma_init(int argc, char** argv) {
 
     for(int i = 1; i <= n_rotors; ++i)  // i starts from 1 because 
     {                                   // files start from argv[1]
-        int l = 0; 
-        Rotor* r = new Rotor(Util::read_file(argv[i], n, l), i);
+        Rotor* r = new Rotor(argv[i]);
         rs.push_back(r);
     }
 
-    int l = 0;
-    p = new Plugboard(Util::read_file(argv[argc - 1], n, l), l);
+    p = new Plugboard(argv[argc - 1]);
 }
 
-void print_rotors()
-{
-	foreach(r,rs)
-        std::cout<<r;
-	foreach_r(r,rs) 
-        std::cout<<*r;
-}
-
+void q(int x) { std::cout<<x<<"->"; }
 void enigma_encode(int &x)
 {
     // Plugboard.
     x = p->f(x);
-	std::cout<<x<<"->";
+
     // Forward through the rotors.
-	if(no_rotors) {
-    	foreach(r, rs) x = (*r)->f(x);
-	std::cout<<x<<"->";
+	if(n_rotors) 
+	{
+    	for(Rotor* r: rs)
+		{
+			x = r->f(x);
+		}
     }
+
     // Reflector.
     x = re->f(x);
-	std::cout<<x<<"->";
 
     // Backwards through the rotors.
-    if(no_rotors) {
-		foreach_r(r, rs)
+    if(n_rotors) 
+	{
+		for(int i= n_rotors - 1; i >= 0; --i) 
 		{
-			x = (*r)->f_inverse(x);
-	std::cout<<x<<"->";
+			x = rs[i]->f_inverse(x);
 		}
 	}
 
     // Plugboard.
     x = p->f(x);
-	std::cout<<x<<"->";
 
     // Rotate rotor.
-    if(no_rotors) {
-		int i = 1; 
-		while(rs[i]->rotate()) ++i;//{ std::cout<<"\nRotor rotated "<<i<<'\n'; ++i;}
+    if(n_rotors) 
+	{
+		int i = 0;
+		while(rs[i]->rotate() && i < n_rotors - 1) ++i;
 	}
-	
 }
 
 int main(int argc, char** argv)
 {
     enigma_init(argc, argv); // first is program name, last is pb.
-//	int i;
-	print_rotors();
-//	while(std::cin>>i) { std::cout<<rs[1]->f_inverse(i); }
     char C;
 	int x;
     while(std::cin>>C)
-    { 
-		std::cout<<"muje";
-		if(0 <= x && x < 26) 
+	{
+		if(isupper(C))
 		{
-			std::cout<<"muje";
 			x = Util::ctoa(C);
         	enigma_encode(x);
 			std::cout << Util::atoc(x);
 	    }
-		else std::cout<<"invalid input";
+		else std::cout<<"Invalid input: "<<C;
     }
     return 0;
 }

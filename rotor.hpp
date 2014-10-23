@@ -8,7 +8,7 @@
 #define ROTOR_H_
 
 #include <array>
-#include <cstdint>
+#include <vector>
 
 #include "encryptor.hpp"
 
@@ -17,7 +17,7 @@ namespace Enigma {
     {
         public:
             // Constructor and destructor.
-            Rotor(int*, int);
+            Rotor(char*);
             ~Rotor();
 
             // Let A = { x :: unsigned int | 0 <= x <= 25 }.

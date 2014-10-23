@@ -19,7 +19,7 @@ namespace Enigma
     {
         public:
             // Constructor and destructor.
-            Plugboard(int*, int);
+            Plugboard(char*);
             ~Plugboard();
 
             // Let A = { x :: unsigned int | 0 <= x <= 25 }.

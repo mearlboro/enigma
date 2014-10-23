@@ -21,17 +21,17 @@ using namespace Enigma;
 
 // Constructor.
 
-// Let f(x)  = y
-// y_pointer the pointer to the mapping of the rotor read from file
-// x         iterate increasingly through the xs in the domain of f
-Rotor::Rotor(int* y_pointer, int rotor_index)
+// Let f(x) = y
+// y        the vector containing the mapping read from a .rot file 
+// x        iterates through the values in the alphabet
+Rotor::Rotor(char* file)
 {
-    index  = rotor_index;
 	offset = 0;
 
+	std::vector<int> y = Util::read_file(file);
     for(int x = 0; x < ALPHABET_LENGTH; ++x) 
 	{
-		map[x] = *(y_pointer + x);
+		map[x] = y[x];
 	}
 }
 
@@ -61,7 +61,8 @@ int Rotor::f_inverse(const int y)
 	// PRE: y :: A
 	int x;
 	for(x = 0; x < ALPHABET_LENGTH; ++x) if(map[x] == y) break;
-//	if(x >= ALPHABET_LENGTH) throw std::runtime_error("inverse not found"); 
+
+	if(x >= ALPHABET_LENGTH) throw std::runtime_error("inverse not found"); 
 	return x;
 }
 
@@ -70,11 +71,11 @@ int Rotor::f_inverse(const int y)
 bool Rotor::rotate() 
 {
 	// Shifts left the direct mapping.
-	int first  = Util::decrement(map[0]);
+	int first = Util::decrement(map[0]);
     for(int i = 0; i < ALPHABET_LENGTH - 1; ++i) {
 		map[i] = Util::decrement(map[i + 1]);
 	}
-	map[ALPHABET_LENGTH] = Util::decrement(first); 
+	map[ALPHABET_LENGTH - 1] = first; 
 	
 	++offset;
 	if(offset == 26) return true;

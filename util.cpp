@@ -16,14 +16,20 @@ using namespace Enigma;
 
 // Reads the content of a .pb or .rot file and returns an array 
 // representing the mapping.
-int* Util::read_file(char *file, int *n, int &i)
-{
-	if(FILE *f = fopen(file, "r")) {   // Checks if file exists.
-		fclose(f);
-		std::ifstream fin(file);       // Reads from file input.
 
-		while (fin >> n[i]) ++i;
-		return n;
+// file the string containing the filename.
+// n    
+std::vector<int> Util::read_file(char* file)
+{
+	std::vector<int> y;
+
+	std::ifstream fin(file);
+	if(fin)
+	{
+		int n;
+		while (fin >> n) y.push_back(n);
+		fin.close();
+		return y;
 	}
 	throw std::runtime_error("fopen failed");
 }
@@ -32,7 +38,7 @@ int* Util::read_file(char *file, int *n, int &i)
 // corresponding index in the alphabet A.
 int Util::ctoa(char C)
 {
-	if('A' <= C && C <= 'Z')
+	if(isupper(C))
 	{
 		return (int)C - ((int)'A');
 	}
@@ -53,7 +59,7 @@ char Util::atoc(int x)
 int Util::decrement(int x)
 {
 	--x;
-	return (x >= 0) ? x : x + (Encryptor::ALPHABET_LENGTH);
+	return (x >= 0) ? x : (x + Encryptor::ALPHABET_LENGTH);
 }
 
 # endif // UTIL_C_

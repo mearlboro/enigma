@@ -7,13 +7,15 @@
 #ifndef UTIL_H_
 #define UTIL_H_
 
+#include <vector>
+
 namespace Enigma 
 {
 	class Util
 	// Contains basic helper functionalities as static functions.
 	{
 		public:
-			static int *read_file(char*, int*, int&);
+			static std::vector<int> read_file(char*);
 
 			static int ctoa(char);
 
