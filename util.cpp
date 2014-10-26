@@ -8,6 +8,8 @@
 #define UTIL_C_
 
 #include <fstream>
+#include <stdexcept>
+#include "encryptor.hpp"
 
 #include "util.hpp"
 
@@ -61,7 +63,7 @@ char Util::atoc(int x)
 int Util::decrement(int x)
 {
 	--x;
-	return (x >= 0) ? x : (x + Encryptor::ALPHABET_LENGTH);
+	return ((x >= 0) ? x : (x + Encryptor::ALPHABET_LENGTH));
 }
 
 # endif // UTIL_C_

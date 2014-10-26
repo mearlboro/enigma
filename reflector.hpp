@@ -13,16 +13,19 @@ namespace Enigma
 {
 	class Reflector : public Encryptor
 	{
-		private:
-			const int REFLECTOR_OFFSET = 13;
-
 		public:
 			// Destructor.
 			~Reflector();
 
 			// The reflector map.
 			int f(const int) override;
-		
+
+		private:
+			const int REFLECTOR_OFFSET = 13;
+
+        public:
+             // Overriding the << operator.
+             friend std::ostream& operator<<(std::ostream&, const Reflector&);		
 	};
 }
 

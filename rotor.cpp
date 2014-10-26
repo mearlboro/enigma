@@ -81,7 +81,8 @@ bool Rotor::rotate()
 //////////////////////////////////////////////////////////////////
 
 // Overriding the << operator for printing the class details.
-namespace Enigma {
+namespace Enigma
+{
     std::ostream& operator<<(std::ostream& o, const Rotor& r)
     {
         std::ostringstream convert;
