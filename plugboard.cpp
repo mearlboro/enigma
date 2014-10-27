@@ -25,7 +25,7 @@ Plugboard::Plugboard(char* file)
 {
     for(int x = 0; x < ALPHABET_LENGTH; ++x) map[x] = x;
 
-	std::vector<int> y = Util::read_file(file);
+    std::vector<int> y = Util::read_file(file);
 
 	int n = y.size() / 2;  
     for(int i = 0; i < n; ++i)

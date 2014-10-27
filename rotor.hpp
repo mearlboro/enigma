@@ -33,10 +33,10 @@ namespace Enigma
             // Array implementation of the function.
             std::array<int, ALPHABET_LENGTH> map;
 
-			// Integer value to specify the number of times it has rotated.
-			int offset;
+            // Integer value to specify the number of times it has rotated.
+            int offset;
 
-		public:
+        public:
             // Overriding the << operator.
             friend std::ostream& operator<<(std::ostream&, const Rotor&);
 
