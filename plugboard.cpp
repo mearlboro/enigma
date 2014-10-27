@@ -49,8 +49,8 @@ Plugboard::~Plugboard() {}
 
 int Plugboard::f(const int x) 
 {
-  // PRE: x :: A
-  return map[x];
+    // PRE: x :: A
+    return map[x];
 }
 
 //////////////////////////////////////////////////////////////////

@@ -28,7 +28,7 @@ using namespace Enigma;
 // Constructor.
 Machine::Machine(int argc, char** argv) {
     rotors = argc - 2; // First argument is program name, last is
-						 // .pb, the rest are .rot.
+          						 // .pb, the rest are .rot.
 
     re = new Reflector();
 
@@ -53,11 +53,11 @@ void Machine::encode(int &x)
     x = p->f(x);
 
     // Forward through the rotors.
-	if(rotors) 
+    if(rotors) 
 	{
-    	for(Rotor* r: rs)
+        for(Rotor* r: rs)
 		{
-			x = r->f(x);
+		    x = r->f(x);
 		}
     }
 

@@ -16,13 +16,13 @@ int main(int argc, char** argv)
     Machine* enigma = new Machine(argc, argv); 
 
     char C;
-	int x;
+  	int x;
     while(std::cin>>C)
-	{
+  	{
 		if(isupper(C))
 		{
 			x = Util::ctoa(C);
-        	enigma->encode(x);
+            enigma->encode(x);
 			enigma->cascade();
             std::cout << Util::atoc(x);
 	    }

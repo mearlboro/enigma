@@ -4,14 +4,6 @@ CFLAGS   = -c -std=c++11
 
 OBJS = rotor.o plugboard.o reflector.o util.o
 
-# all: enigma
-# 
-# enigma: $(OBJS)
-# 	$(CXX) $(OBJS) -o $@
-# 
-# %.o : %.cpp %.hpp Main.cpp
-# 	$(CXX) $(CXXFLAGS) -c $< -o $@
-# 
 enigma: Main.o machine.o $(OBJS)
 	$(CXX) $(CXXFLAGS) $< -o $@
 
