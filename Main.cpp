@@ -5,7 +5,6 @@
 #include <vector>
 #include <stdexcept>
 #include "util.hpp"
-#include "util.cpp"
 
 #include "machine.hpp"
 #include "machine.cpp"

@@ -10,14 +10,6 @@
 #include <iostream>
 #include <vector>
 #include "util.hpp"
-#include "util.cpp"
-
-#include "reflector.hpp"
-#include "reflector.cpp"
-#include "rotor.hpp"
-#include "rotor.cpp"
-#include "plugboard.hpp"
-#include "plugboard.cpp"
 
 #include "machine.hpp"
 
@@ -91,24 +83,24 @@ void Machine::cascade()
 	if(rotors) 
 	{
 		int i = 0;
-		if(rs[i]->rotate() && i < rotors - 1) rs[i+1]->rotate();
+		while(rs[i]->rotate() && i < rotors - 1) ++i;
 	}
 }
 
 //////////////////////////////////////////////////////////////////
 
 // Overriding the << operator for printing the class details.
-/*namespace Enigma 
+namespace Enigma 
 {
     std::ostream& operator<<(std::ostream& o, const Machine& m)
     {
         std::ostringstream convert;
-        convert << "Enigma Machine\nPlugboard:" << m.p << "\nReflector:"
-                << m.re << "\nRotors:";
-        for(int i = 0; i < m.rotors; ++i) convert << m.rs[i];
+        convert << "Enigma Machine\nPlugboard:" << *(m.p) << "\nReflector:"
+                << *(m.re) << "\nRotors:";
+        for(int i = 0; i < m.rotors; ++i) convert << *(m.rs[i]);
 
         return o << convert.str() << '\n';
     }
-}*/
+}
 
 #endif // MACHINE_C_

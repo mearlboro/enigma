@@ -92,7 +92,6 @@ namespace Enigma
         {
 			const int x = i;
             convert << "\n\tf(" << i << ")\t= " << r.map[x];
-                 //   << "\tf'(" << i << ")\t= "  << r.f_inverse(x);
         }
 
         return o << convert.str() << '\n';

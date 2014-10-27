@@ -27,25 +27,25 @@ namespace Enigma
             Machine(int, char**);
             ~Machine();
 
-			      // Encodes the given input.
-    		    void encode(int&);        
+			// Encodes the given input.
+    		void encode(int&);        
 
-			      // Cascades the rotations.
-			      void cascade();
+			// Cascades the rotations.
+			void cascade();
 
         private:
-			      // Number of rotors in the machine.
-		        int rotors;
+			// Number of rotors in the machine.
+		    int rotors;
 
-			      // The components.
+			// The components.
             std::vector<Rotor*> rs;
             Reflector* re;
             Plugboard* p;
 
-//  		public:
-			      //Overriding the << operator.
-            //friend std::ostream& operator<<(std::ostream&, const Machine&);
-	  };
+  		public:
+            //Overriding the << operator.
+            friend std::ostream& operator<<(std::ostream&, const Machine&);
+	};
 }
 
 #endif // MACHINE_H_
