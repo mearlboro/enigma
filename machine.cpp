@@ -28,13 +28,13 @@ using namespace Enigma;
 // Constructor.
 Machine::Machine(int argc, char** argv) {
     rotors = argc - 2; // First argument is program name, last is
-          						 // .pb, the rest are .rot.
+           			   // .pb, the rest are .rot.
 
     re = new Reflector();
 
     for(int i = 1; i <= rotors; ++i) 
     {
-        Rotor* r = new Rotor(argv[i]);
+        Rotor *r = new Rotor(argv[i]);
         rs.push_back(r);
     }
 
@@ -42,7 +42,15 @@ Machine::Machine(int argc, char** argv) {
 }
 
 // Destructor.
-Machine::~Machine() {}
+Machine::~Machine() 
+{
+    delete re;
+    delete p;
+    if(rotors) 
+    {
+        for(Rotor *r : rs) delete r;
+    }
+}
 
 ///////////////////////////////////////////////////////////////////
 
@@ -83,7 +91,7 @@ void Machine::cascade()
 	if(rotors) 
 	{
 		int i = 0;
-		while(rs[i]->rotate() && i < rotors - 1) ++i;
+		if(rs[i]->rotate() && i < rotors - 1) rs[i+1]->rotate();
 	}
 }
 

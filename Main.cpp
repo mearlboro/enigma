@@ -22,7 +22,7 @@ int main(int argc, char** argv)
 
     char C;
     int x;
-    while(std::cin>>C)
+    while(std::cin>>std::ws>>C)
     {
         if(isupper(C))
         {
