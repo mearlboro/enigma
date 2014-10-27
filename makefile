@@ -13,18 +13,18 @@ Main.o: Main.cpp machine.o $(OBJS)
 machine.o: machine.cpp encryptor.hpp $(OBJS)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-rotor.o: rotor.cpp encryptor.hpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-plugboard.o: plugboard.cpp encryptor.hpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-reflector.o: reflector.cpp encryptor.hpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-util.o: util.cpp encryptor.hpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
- 
+# rotor.o: rotor.cpp encryptor.hpp
+# 	$(CXX) $(CXXFLAGS) -c $< -o $@
+# 
+# plugboard.o: plugboard.cpp encryptor.hpp
+# 	$(CXX) $(CXXFLAGS) -c $< -o $@
+# 
+# reflector.o: reflector.cpp encryptor.hpp
+# 	$(CXX) $(CXXFLAGS) -c $< -o $@
+# 
+# util.o: util.cpp encryptor.hpp
+# 	$(CXX) $(CXXFLAGS) -c $< -o $@
+#  
 clean:
 	rm -rf enigma *.o
  

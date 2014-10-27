@@ -14,26 +14,26 @@ using namespace Enigma;
 
 int main(int argc, char** argv)
 {
-    if(argc > 1)
-    {
-        Machine* enigma = new Machine(argc, argv); 
-
-        char C;
-        int x;
-        while(std::cin>>C)
-        {
-            if(isupper(C))
-            {
-                x = Util::ctoa(C);
-                enigma->encode(x);
-                enigma->cascade();
-                std::cout << Util::atoc(x);
-            }
-            else std::cout << "Invalid input: " << C;
-        }
-        return 0;
+    if (argc <= 1) {
+        throw std::runtime_error("No configuration files provided");
     }
-    else std::runtime_error("Invalid number of arguments.");
+
+    Machine* enigma = new Machine(argc, argv); 
+
+    char C;
+    int x;
+    while(std::cin>>C)
+    {
+        if(isupper(C))
+        {
+            x = Util::ctoa(C);
+            enigma->encode(x);
+            enigma->cascade();
+            std::cout << Util::atoc(x);
+        }
+        else std::cout << "Invalid input: " << C;
+    }
+    return 0;
 }
 
 #endif // MAIN_C_
