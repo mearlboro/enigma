@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <stdexcept>
 #include "util.hpp"
 #include "util.cpp"
 
@@ -13,22 +14,26 @@ using namespace Enigma;
 
 int main(int argc, char** argv)
 {
-    Machine* enigma = new Machine(argc, argv); 
+    if(argc > 1)
+    {
+        Machine* enigma = new Machine(argc, argv); 
 
-    char C;
-  	int x;
-    while(std::cin>>C)
-  	{
-		if(isupper(C))
-		{
-			x = Util::ctoa(C);
-            enigma->encode(x);
-			enigma->cascade();
-            std::cout << Util::atoc(x);
-	    }
-		else std::cout << "Invalid input: " << C;
+        char C;
+        int x;
+        while(std::cin>>C)
+        {
+            if(isupper(C))
+            {
+                x = Util::ctoa(C);
+                enigma->encode(x);
+                enigma->cascade();
+                std::cout << Util::atoc(x);
+            }
+            else std::cout << "Invalid input: " << C;
+        }
+        return 0;
     }
-    return 0;
+    else std::runtime_error("Invalid number of arguments.");
 }
 
 #endif // MAIN_C_
